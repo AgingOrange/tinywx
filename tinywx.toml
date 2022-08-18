@@ -1,0 +1,26 @@
+# tinywx.toml
+#
+# Example configuration file for `tinywx`.
+#
+# This is the equivalent of
+# `tinywx -c "the hague" -C nl -d icon feels_like -k <YOUR_API_KEY>
+
+# City is required.
+city = "the hague"
+
+# State can be left out if not necessary.
+#state = "ca"
+
+# Country code is required.
+country = "nl"
+
+# Your openweathermap api key is required. Get yours at https://openweathermap.org
+api_key = "YOUR_API_KEY"
+
+# Units are displayed in metric by default. To use imperial units, uncomment the
+# following line.
+#imperial = true
+
+# Valid items are "icon", "temp", "feels_like", "description" and "humidity".
+# See CurrentWeather.get() in `wx/src/lib.rs` should you want to add more.
+data = ["icon", "feels_like"]
