@@ -21,7 +21,7 @@ using a config file. Note that you cannot use both at the same time.
 ### Command line
 
 ```bash
-$ tinywx -c "the hague" -C nl -i icon feels_like -k <YOUR_API_KEY>
+$ tinywx -c "the hague" -C nl -d icon feels_like -k <YOUR_API_KEY>
  30°
 ```
 
@@ -37,3 +37,14 @@ $ tinywx -f ~/.config/tinywx/tinywx.toml
 ```
 
 Use `-h` to see available options, and `--help` for the full help text.
+
+## Installation
+
+You will need to have Rust installed. The easiest way is to use `rustup` as 
+described on the [Rust website](https://www.rust-lang.org/tools/install).
+
+After you've installed Rust, clone this project and from its root directory, 
+use `cargo build --release` to create the binary (`cargo` is part of the 
+Rust toolchain). Copy the binary to 
+somewhere in your path, for example using `cp ./target/release/tinywx ~/.
+local/bin/`.
