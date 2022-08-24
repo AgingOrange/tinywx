@@ -5,18 +5,25 @@ use chrono::prelude::*;
 use serde::{Deserialize, Serialize};
 use url::Url;
 
-/// Nerd Font representation of OpenWeatherMap icons.
-const CLEAR_DAY: &str = "";
-const CLEAR_NIGHT: &str = "";
-const FEW_CLOUDS_DAY: &str = "";
-const FEW_CLOUDS_NIGHT: &str = "";
-const SCATTERED_CLOUDS: &str = "摒";
-const BROKEN_CLOUDS: &str = "";
-const SHOWER_RAIN: &str = "";
-const RAIN: &str = "";
-const THUNDERSTORM: &str = "";
-const SNOW: &str = "";
-const MIST: &str = "";
+/// OpenWeatherMap icon codes.
+const CLEAR_DAY: &str = "01d";
+const CLEAR_NIGHT: &str = "01n";
+const FEW_CLOUDS_DAY: &str = "02d";
+const FEW_CLOUDS_NIGHT: &str = "02n";
+const SCATTERED_CLOUDS_DAY: &str = "03d";
+const SCATTERED_CLOUDS_NIGHT: &str = "03n";
+const BROKEN_CLOUDS_DAY: &str = "04d";
+const BROKEN_CLOUDS_NIGHT: &str = "04n";
+const SHOWER_RAIN_DAY: &str = "09d";
+const SHOWER_RAIN_NIGHT: &str = "09n";
+const RAIN_DAY: &str = "10d";
+const RAIN_NIGHT: &str = "10n";
+const THUNDERSTORM_DAY: &str = "11d";
+const THUNDERSTORM_NIGHT: &str = "11n";
+const SNOW_DAY: &str = "13d";
+const SNOW_NIGHT: &str = "13n";
+const MIST_DAY: &str = "50d";
+const MIST_NIGHT: &str = "50n";
 
 #[derive(Debug)]
 pub struct Location {
@@ -159,7 +166,7 @@ impl CurrentWeather {
     /// Returns supported weather data. Modify this if you need more data types.
     pub fn get(&self, item: &str) -> String {
         match item {
-            "icon" => match_icon(&self.weather[0].icon).to_string(),
+            "icon" => match_icon(&self.weather[0].icon),
             "temp" => format!("{}°", self.main.temp.round()),
             "feels_like" => format!("{}°", self.main.feels_like.round()),
             "humidity" => format!("{}%", self.main.humidity),
@@ -170,27 +177,27 @@ impl CurrentWeather {
     }
 }
 
-/// Convert OpenWeatherMap icon id to Nerd Font icon.
-fn match_icon<S: AsRef<str>>(code: S) -> &'static str {
+/// Convert OpenWeatherMap icon id to icon.
+fn match_icon<S: AsRef<str>>(code: S) -> String {
     match code.as_ref() {
-        "01d" => CLEAR_DAY,
-        "01n" => CLEAR_NIGHT,
-        "02d" => FEW_CLOUDS_DAY,
-        "02n" => FEW_CLOUDS_NIGHT,
-        "03d" | "03n" => SCATTERED_CLOUDS,
-        "04d" | "04n" => BROKEN_CLOUDS,
-        "09d" | "09n" => SHOWER_RAIN,
-        "10d" | "10n" => RAIN,
-        "11d" | "11n" => THUNDERSTORM,
-        "13d" | "13n" => SNOW,
-        "50d" | "50n" => MIST,
-        _ => "?",
-    }
+        CLEAR_DAY => "",
+        CLEAR_NIGHT => "",
+        FEW_CLOUDS_DAY => "",
+        FEW_CLOUDS_NIGHT => "",
+        SCATTERED_CLOUDS_DAY | SCATTERED_CLOUDS_NIGHT => "摒",
+        BROKEN_CLOUDS_DAY | BROKEN_CLOUDS_NIGHT => "",
+        SHOWER_RAIN_DAY | SHOWER_RAIN_NIGHT => "",
+        RAIN_DAY | RAIN_NIGHT => "",
+        THUNDERSTORM_DAY | THUNDERSTORM_NIGHT => "",
+        SNOW_DAY | SNOW_NIGHT => "",
+        MIST_DAY | MIST_NIGHT => "",
+        _ => "?"
+    }.to_string()
 }
 
 /// Fetches the current weather for the given location.
 pub fn get(location: Location, units: Units, key: &str) -> Result<CurrentWeather> {
-    let mut url = Url::parse("http://api.openweathermap.org/data/2.5/weather")?;
+    let mut url = Url::parse("https://api.openweathermap.org/data/2.5/weather")?;
     url.query_pairs_mut()
        .append_pair("q", location.to_string().as_str());
     url.query_pairs_mut().append_pair("units", units.as_str());
